@@ -5,7 +5,7 @@ const span = document.querySelector('.span')
 const btn = document.querySelector('.btn')
 const h1 = document.querySelector('.h1')
 const snakes = [snake]
-let difficulty = 25
+let difficulty = 50
 let interval
 let direction = ''
 let lost = 0
@@ -201,7 +201,7 @@ const refresh = () => {
 	score = difficulty
 	hasStarted = 0
     span.textContent = score
-	apple.style.top = Math.floor(Math.random() * 50) * 15 + 'px'
+	apple.style.top = Math.floor(Math.random() * 44) * 15 + 'px'
 	apple.style.left = Math.floor(Math.random() * 80) * 15 + 'px'
 	snake.style.top = '360px'
 	snake.style.left = '585px'
