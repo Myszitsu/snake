@@ -56,7 +56,6 @@ body {
 }
 
 
-
 .lost {
     display: block;
     color: red;
@@ -105,6 +104,66 @@ body {
     &:hover {
         background-color: rgba(255, 255, 255, .3);
     }
+}
+
+
+
+.modal {
+    display: none;
+    position: absolute;
+    // display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-inline: 20px;
+    bottom: 0;
+    width: 100%;
+    height: 30px;
+    // gap: 5px;
+    font-weight: 300;
+    color: #fff;
+    background-color:rgba(0, 0, 0, .7);
+
+    span {
+        color: rgb(255, 0, 0);
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    p {
+        margin-right: 8px;
+        font-size: 14px;
+        text-align: center;
+    }
+
+    button {
+        // display: flex;
+        height: 100%;
+        width: 40px;
+        font-size: 14px;
+        font-family: 'Exo 2', sans-serif;
+        background: transparent;
+        color: rgba(255, 255, 255, .7);
+        color: white;
+        background-color: rgba(0, 0, 0, .5);
+        border: none;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: background-color .3s, color .3s;
+    }
+
+    .yes {
+        &:hover{
+            background-color: rgba(0, 255, 0, .5);
+        }
+    }
+    .no {        
+        &:hover {
+            background-color: rgba(255, 0, 0, .7);
+            
+        }
+    }
+
+
 }
 
 .active {

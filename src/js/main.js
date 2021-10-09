@@ -167,7 +167,6 @@ const checkPosition = () => {
 		snakes[0].style.left = `0px`
 		position.left = +snake.style.left.slice(0, -2)
 	} else if (snakes[0].style.left === '-15px') {
-		console.log('snake')
 		snakes[0].style.left = playground.scrollWidth - 15 + 'px'
 		position.left = +snake.style.left.slice(0, -2)
 	} else if (+snake.style.top.slice(0, -2) === playground.clientHeight) {
@@ -218,7 +217,7 @@ const resizeWidth = () => {
 
 const resizeHeight = () => {
 	size.height = 0
-	while (size.height < window.innerHeight - 60) {
+	while (size.height < window.innerHeight - 75) {
 		size.height += 15
 	}
 
@@ -230,28 +229,25 @@ const resizeHeight = () => {
 }
 
 const resize = () => {
-
 	if (window.innerWidth < 1260) {
 		resizeWidth()
-		refresh()
+		restart()
 	} else {
 		size.width = 1200
 		playground.style.width = `${size.width}px`
-		refresh()
-		console.log('devtools resize');
+		restart()
 	}
-	if (window.innerHeight <= 680) {
+	if (window.innerHeight <= 720) {
 		resizeHeight()
-		refresh()
+		restart()
 	} else {
 		size.height = 660
 		playground.style.height = `${size.height}px`
-		refresh()
+		restart()
 	}
 }
 
-
-const refresh = () => {
+const restart = () => {
 	for (let i = snakes.length - 1; i > 0; i--) {
 		snakes[i].remove()
 		snakes.pop()
@@ -260,7 +256,7 @@ const refresh = () => {
 	h1.classList.remove('win')
 	h1.classList.remove('lost')
 	h1.classList.add('active')
-	if (size.width <= 570) {
+	if (size.width < 540) {
 		h1.textContent = 'use 🏹'
 	} else {
 		h1.textContent = 'navigate with arrows'
@@ -293,4 +289,4 @@ document.addEventListener('keydown', e => {
 
 window.addEventListener('resize', resize)
 
-btn.addEventListener('click', refresh)
+btn.addEventListener('click', restart)
