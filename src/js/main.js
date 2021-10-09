@@ -16,6 +16,11 @@ let score = difficulty
 let isReady = true
 let hasStarted = 0
 
+const check = {
+	direction: 0,
+	translated: false,
+}
+
 const size = {
 	width: 1200,
 	height: 660,
@@ -86,7 +91,10 @@ const dirCheck = e => {
 }
 
 const movementVertical = () => {
-	if (snakes.length > 1 && position.top + 15 * direction === +snakes[1].style.top.slice(0, -2)) {
+	if (
+		(snakes.length > 1 && position.top + 15 * direction === +snakes[1].style.top.slice(0, -2)) ||
+		(snakes.length > 1 && check.translated && check.direction === direction)
+	) {
 		direction *= -1
 	}
 	position.top += 15 * direction
@@ -104,7 +112,10 @@ const movementVertical = () => {
 }
 
 const movementHorizontal = () => {
-	if (snakes.length > 1 && position.left + 15 * direction === +snakes[1].style.left.slice(0, -2)) {
+	if (
+		(snakes.length > 1 && position.left + 15 * direction === +snakes[1].style.left.slice(0, -2)) ||
+		(snakes.length > 1 && check.translated && check.direction === direction)
+	) {
 		direction *= -1
 	}
 	position.left += 15 * direction
@@ -166,15 +177,25 @@ const checkPosition = () => {
 	if (+snake.style.left.slice(0, -2) === size.width) {
 		snakes[0].style.left = `0px`
 		position.left = +snake.style.left.slice(0, -2)
+		check.translated = true
+		check.direction = -direction
 	} else if (snakes[0].style.left === '-15px') {
 		snakes[0].style.left = playground.scrollWidth - 15 + 'px'
 		position.left = +snake.style.left.slice(0, -2)
+		check.translated = true
+		check.direction = -direction
 	} else if (+snake.style.top.slice(0, -2) === playground.clientHeight) {
 		snakes[0].style.top = '0px'
 		position.top = +snake.style.top.slice(0, -2)
+		check.translated = true
+		check.direction = -direction
 	} else if (snakes[0].style.top === '-15px') {
 		snakes[0].style.top = playground.clientHeight - 15 + 'px'
 		position.top = +snake.style.top.slice(0, -2)
+		check.translated = true
+		check.direction = -direction
+	} else {
+		check.translated = false
 	}
 }
 
@@ -269,6 +290,7 @@ const restart = () => {
 	score = difficulty
 	hasStarted = 0
 	span.textContent = score
+	span.style.color = 'hsl(179, 100%, 55%)'
 	apple.style.top = Math.floor(Math.random() * (size.height / 15)) * 15 + 'px'
 	apple.style.left = Math.floor(Math.random() * (size.width / 15)) * 15 + 'px'
 	snake.style.top = `${size.height / 2 - 15}px`
