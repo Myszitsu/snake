@@ -118,16 +118,13 @@ const movementVertical = () => {
 		) {
 			direction *= -1
 		}
-		position.top += 15 * direction
 		for (let i = snakes.length - 1; i > 0; i--) {
 			snakes[i].style.left = snakes[i - 1].style.left
 			snakes[i].style.top = snakes[i - 1].style.top
 		}
-		snakes[0].style.top = `${position.top}px`
-	} else {
-		position.top += 15 * direction
-		snakes[0].style.top = `${position.top}px`
 	}
+	position.top += 15 * direction
+	snakes[0].style.top = `${position.top}px`
 
 	isReady = true
 }
@@ -161,17 +158,13 @@ const movementHorizontal = () => {
 		) {
 			direction *= -1
 		}
-		position.left += 15 * direction
-
 		for (let i = snakes.length - 1; i > 0; i--) {
 			snakes[i].style.left = snakes[i - 1].style.left
 			snakes[i].style.top = snakes[i - 1].style.top
 		}
-		snakes[0].style.left = `${position.left}px`
-	} else {
-		position.left += 15 * direction
-		snakes[0].style.left = `${position.left}px`
 	}
+	position.left += 15 * direction
+	snakes[0].style.left = `${position.left}px`
 
 	isReady = true
 }
