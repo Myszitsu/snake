@@ -90,43 +90,86 @@ const dirCheck = e => {
 	}
 }
 
+// const movementVertical = () => {
+// 	if (
+// 		(snakes.length > 1 && position.top + 15 * direction === +snakes[1].style.top.slice(0, -2)) ||
+// 		(snakes.length > 1 && check.translated && check.direction === direction)
+// 	) {
+// 		direction *= -1
+// 	}
+// 	position.top += 15 * direction
+// 	if (snakes.length > 1) {
+// 		for (let i = snakes.length - 1; i > 0; i--) {
+// 			snakes[i].style.left = snakes[i - 1].style.left
+// 			snakes[i].style.top = snakes[i - 1].style.top
+// 		}
+// 		snakes[0].style.top = `${position.top}px`
+// 	} else if (snakes.length === 1) {
+// 		snakes[0].style.top = `${position.top}px`
+// 	}
+
+// 	isReady = true
+// }
 const movementVertical = () => {
-	if (
-		(snakes.length > 1 && position.top + 15 * direction === +snakes[1].style.top.slice(0, -2)) ||
-		(snakes.length > 1 && check.translated && check.direction === direction)
-	) {
-		direction *= -1
-	}
-	position.top += 15 * direction
 	if (snakes.length > 1) {
+		if (
+			position.top + 15 * direction === +snakes[1].style.top.slice(0, -2) ||
+			(check.translated && check.direction === direction)
+		) {
+			direction *= -1
+		}
+		position.top += 15 * direction
 		for (let i = snakes.length - 1; i > 0; i--) {
 			snakes[i].style.left = snakes[i - 1].style.left
 			snakes[i].style.top = snakes[i - 1].style.top
 		}
 		snakes[0].style.top = `${position.top}px`
-	} else if (snakes.length === 1) {
+	} else {
+		position.top += 15 * direction
 		snakes[0].style.top = `${position.top}px`
 	}
 
 	isReady = true
 }
 
-const movementHorizontal = () => {
-	if (
-		(snakes.length > 1 && position.left + 15 * direction === +snakes[1].style.left.slice(0, -2)) ||
-		(snakes.length > 1 && check.translated && check.direction === direction)
-	) {
-		direction *= -1
-	}
-	position.left += 15 * direction
+// const movementHorizontal = () => {
+// 	if (
+// 		(snakes.length > 1 && position.left + 15 * direction === +snakes[1].style.left.slice(0, -2)) ||
+// 		(snakes.length > 1 && check.translated && check.direction === direction)
+// 	) {
+// 		direction *= -1
+// 	}
+// 	position.left += 15 * direction
 
+// 	if (snakes.length > 1) {
+// 		for (let i = snakes.length - 1; i > 0; i--) {
+// 			snakes[i].style.left = snakes[i - 1].style.left
+// 			snakes[i].style.top = snakes[i - 1].style.top
+// 		}
+// 		snakes[0].style.left = `${position.left}px`
+// 	} else if (snakes.length === 1) {
+// 		snakes[0].style.left = `${position.left}px`
+// 	}
+
+// 	isReady = true
+// }
+const movementHorizontal = () => {
 	if (snakes.length > 1) {
+		if (
+			position.left + 15 * direction === +snakes[1].style.left.slice(0, -2) ||
+			(check.translated && check.direction === direction)
+		) {
+			direction *= -1
+		}
+		position.left += 15 * direction
+
 		for (let i = snakes.length - 1; i > 0; i--) {
 			snakes[i].style.left = snakes[i - 1].style.left
 			snakes[i].style.top = snakes[i - 1].style.top
 		}
 		snakes[0].style.left = `${position.left}px`
-	} else if (snakes.length === 1) {
+	} else {
+		position.left += 15 * direction
 		snakes[0].style.left = `${position.left}px`
 	}
 
@@ -304,6 +347,7 @@ resize()
 
 document.addEventListener('keydown', e => {
 	if (lost === 0 && e.key.includes('Arrow') && isReady) {
+		// clearInterval(interval)
 		isReady = false
 		steer(e)
 	}
