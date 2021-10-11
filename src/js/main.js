@@ -16,6 +16,15 @@ let score = difficulty
 let isReady = true
 let hasStarted = 0
 
+const getTranslate = (el, axis) => {
+	switch (axis) {
+		case 'x':
+			return +el.style.transform.split('(')[1].slice(0, -1).split(',')[0].slice(0, -2)
+		case 'y':
+			return +el.style.transform.split('(')[1].slice(0, -1).split(',')[1].slice(0, -2)
+	}
+}
+
 const check = {
 	direction: 0,
 	translated: false,
@@ -27,14 +36,12 @@ const size = {
 }
 
 span.textContent = score
-apple.style.top = Math.floor(Math.random() * (size.height / 15)) * 15 + 'px'
-apple.style.left = Math.floor(Math.random() * (size.width / 15)) * 15 + 'px'
-snake.style.top = `${size.height / 2 - 15}px`
-snake.style.left = `${size.width / 2 - 15}px`
+apple.style.transform = `translate(${Math.floor(Math.random() * (size.width / 15)) * 15}px, ${Math.floor(Math.random() * (size.height / 15)) * 15}px)`
+snake.style.transform = `translate(${size.width / 2 - 15}px, ${size.height / 2 - 15}px)`
 
 const position = {
-	top: +snake.style.top.slice(0, -2),
-	left: +snake.style.left.slice(0, -2),
+	x: getTranslate(snake, 'x'),
+	y: getTranslate(snake, 'y'),
 }
 
 const setColor = el => {
@@ -56,8 +63,7 @@ const setColor = el => {
 const app = () => {
 	const snakeEl = document.createElement('div')
 	snakeEl.classList.add('snake')
-	snakeEl.style.top = snakes[snakes.length - 1].style.top
-	snakeEl.style.left = snakes[snakes.length - 1].style.left
+	snakeEl.style.transform = snakes[snakes.length - 1].style.transform
 	setColor(snakeEl)
 
 	playground.append(snakeEl)
@@ -68,8 +74,7 @@ const grow = () => {
 	if (snakes.length === 1) {
 		snakes[0].style.backgroundColor = `hsl(${h}, 80%, 50%)`
 	}
-	apple.style.top = Math.floor(Math.random() * (size.height / 15)) * 15 + 'px'
-	apple.style.left = Math.floor(Math.random() * (size.width / 15)) * 15 + 'px'
+	apple.style.transform = `translate(${Math.floor(Math.random() * (size.width / 15)) * 15}px, ${Math.floor(Math.random() * (size.height / 15)) * 15}px)`
 	app()
 	score--
 	span.style.color = `hsl(${h}, 80%, 50%)`
@@ -113,58 +118,34 @@ const dirCheck = e => {
 const movementVertical = () => {
 	if (snakes.length > 1) {
 		if (
-			position.top + 15 * direction === +snakes[1].style.top.slice(0, -2) ||
+			position.y + 15 * direction === getTranslate(snakes[1], 'y') ||
 			(check.translated && check.direction === direction)
 		) {
 			direction *= -1
 		}
 		for (let i = snakes.length - 1; i > 0; i--) {
-			snakes[i].style.left = snakes[i - 1].style.left
-			snakes[i].style.top = snakes[i - 1].style.top
+			snakes[i].style.transform = snakes[i - 1].style.transform
 		}
 	}
-	position.top += 15 * direction
-	snakes[0].style.top = `${position.top}px`
+	position.y += 15 * direction
+	snakes[0].style.transform = `translate(${position.x}px, ${position.y}px)`
 
 	isReady = true
 }
-
-// const movementHorizontal = () => {
-// 	if (
-// 		(snakes.length > 1 && position.left + 15 * direction === +snakes[1].style.left.slice(0, -2)) ||
-// 		(snakes.length > 1 && check.translated && check.direction === direction)
-// 	) {
-// 		direction *= -1
-// 	}
-// 	position.left += 15 * direction
-
-// 	if (snakes.length > 1) {
-// 		for (let i = snakes.length - 1; i > 0; i--) {
-// 			snakes[i].style.left = snakes[i - 1].style.left
-// 			snakes[i].style.top = snakes[i - 1].style.top
-// 		}
-// 		snakes[0].style.left = `${position.left}px`
-// 	} else if (snakes.length === 1) {
-// 		snakes[0].style.left = `${position.left}px`
-// 	}
-
-// 	isReady = true
-// }
 const movementHorizontal = () => {
 	if (snakes.length > 1) {
 		if (
-			position.left + 15 * direction === +snakes[1].style.left.slice(0, -2) ||
+			position.x + 15 * direction === getTranslate(snakes[1], 'x') ||
 			(check.translated && check.direction === direction)
 		) {
 			direction *= -1
 		}
 		for (let i = snakes.length - 1; i > 0; i--) {
-			snakes[i].style.left = snakes[i - 1].style.left
-			snakes[i].style.top = snakes[i - 1].style.top
+			snakes[i].style.transform = snakes[i - 1].style.transform
 		}
 	}
-	position.left += 15 * direction
-	snakes[0].style.left = `${position.left}px`
+	position.x += 15 * direction
+	snakes[0].style.transform = `translate(${position.x}px, ${position.y}px)`
 
 	isReady = true
 }
@@ -192,42 +173,25 @@ const defeat = () => {
 	btn.classList.add('active')
 }
 
-// const checkPosition = () => {
-// 	if (snakes[0].getBoundingClientRect().left === playground.getBoundingClientRect().right) {
-// 		snakes[0].style.left = `0px`
-// 		position.left = +snake.style.left.slice(0, -2)
-// 	} else if (snakes[0].getBoundingClientRect().left + 15 === playground.getBoundingClientRect().left) {
-// 		snakes[0].style.left = playground.clientWidth - 15 + 'px'
-// 		position.left = +snake.style.left.slice(0, -2)
-// 	} else if (snakes[0].getBoundingClientRect().top === playground.getBoundingClientRect().bottom) {
-// 		snakes[0].style.top = '0px'
-// 		position.top = +snake.style.top.slice(0, -2)
-// 	} else if (snakes[0].getBoundingClientRect().top + 15 === playground.getBoundingClientRect().top) {
-// 		snakes[0].style.top = playground.clientHeight - 15 + 'px'
-// 		position.top = +snake.style.top.slice(0, -2)
-// 	}
-// }
-
-// snakes[0].style.left = '1200px'
 const checkPosition = () => {
-	if (+snake.style.left.slice(0, -2) === size.width) {
-		snakes[0].style.left = `0px`
-		position.left = +snake.style.left.slice(0, -2)
+	if (getTranslate(snake, 'x') === size.width) {
+		position.x = 0
+		snakes[0].style.transform = `translate(${position.x}px, ${position.y}px)`
 		check.translated = true
 		check.direction = -direction
-	} else if (snakes[0].style.left === '-15px') {
-		snakes[0].style.left = playground.scrollWidth - 15 + 'px'
-		position.left = +snake.style.left.slice(0, -2)
+	} else if (getTranslate(snake, 'x') === -15) {
+		position.x = playground.scrollWidth - 15
+		snakes[0].style.transform = `translate(${position.x}px, ${position.y}px)`
 		check.translated = true
 		check.direction = -direction
-	} else if (+snake.style.top.slice(0, -2) === playground.clientHeight) {
-		snakes[0].style.top = '0px'
-		position.top = +snake.style.top.slice(0, -2)
+	} else if (getTranslate(snake, 'y') === playground.clientHeight) {
+		position.y = 0
+		snakes[0].style.transform = `translate(${position.x}px, ${position.y}px)`
 		check.translated = true
 		check.direction = -direction
-	} else if (snakes[0].style.top === '-15px') {
-		snakes[0].style.top = playground.clientHeight - 15 + 'px'
-		position.top = +snake.style.top.slice(0, -2)
+	} else if (getTranslate(snake, 'y') === -15) {
+		position.y = playground.clientHeight - 15
+		snakes[0].style.transform = `translate(${position.x}px, ${position.y}px)`
 		check.translated = true
 		check.direction = -direction
 	} else {
@@ -245,7 +209,7 @@ const steer = e => {
 		}
 		checkPosition()
 
-		if (snakes[0].style.top === apple.style.top && snakes[0].style.left === apple.style.left) {
+		if (snakes[0].style.transform === apple.style.transform) {
 			grow()
 			if (score === 0) {
 				win()
@@ -253,7 +217,7 @@ const steer = e => {
 		}
 
 		for (let i = snakes.length - 1; i > 1; i--) {
-			if (snakes[i].style.left === snakes[0].style.left && snakes[i].style.top === snakes[0].style.top) {
+			if (snakes[i].style.transform === snakes[0].style.transform) {
 				defeat()
 			}
 		}
@@ -327,20 +291,17 @@ const restart = () => {
 	hasStarted = 0
 	span.textContent = score
 	span.style.color = 'hsl(179, 100%, 55%)'
-	apple.style.top = Math.floor(Math.random() * (size.height / 15)) * 15 + 'px'
-	apple.style.left = Math.floor(Math.random() * (size.width / 15)) * 15 + 'px'
-	snake.style.top = `${size.height / 2 - 15}px`
-	snake.style.left = `${size.width / 2 - 15}px`
+	apple.style.transform = `translate(${Math.floor(Math.random() * (size.width / 15)) * 15}px, ${Math.floor(Math.random() * (size.height / 15)) * 15}px)`
+	snake.style.transform = `translate(${size.width / 2 - 15}px, ${size.height / 2 - 15}px)`
 	snake.style.backgroundColor = '#fff'
-	position.top = +snake.style.top.slice(0, -2)
-	position.left = +snake.style.left.slice(0, -2)
+	position.x = getTranslate(snake, 'x')
+	position.y = getTranslate(snake, 'y')
 	apple.style.display = 'block'
 }
 resize()
 
 document.addEventListener('keydown', e => {
 	if (lost === 0 && e.key.includes('Arrow') && isReady) {
-		// clearInterval(interval)
 		isReady = false
 		steer(e)
 	}
