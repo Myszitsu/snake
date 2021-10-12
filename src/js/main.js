@@ -36,7 +36,9 @@ const size = {
 }
 
 span.textContent = score
-apple.style.transform = `translate(${Math.floor(Math.random() * (size.width / 15)) * 15}px, ${Math.floor(Math.random() * (size.height / 15)) * 15}px)`
+apple.style.transform = `translate(${Math.floor(Math.random() * (size.width / 15)) * 15}px, ${
+	Math.floor(Math.random() * (size.height / 15)) * 15
+}px)`
 snake.style.transform = `translate(${size.width / 2 - 15}px, ${size.height / 2 - 15}px)`
 
 const position = {
@@ -74,7 +76,15 @@ const grow = () => {
 	if (snakes.length === 1) {
 		snakes[0].style.backgroundColor = `hsl(${h}, 80%, 50%)`
 	}
-	apple.style.transform = `translate(${Math.floor(Math.random() * (size.width / 15)) * 15}px, ${Math.floor(Math.random() * (size.height / 15)) * 15}px)`
+	apple.style.transform = `translate(${Math.floor(Math.random() * (size.width / 15)) * 15}px, ${
+		Math.floor(Math.random() * (size.height / 15)) * 15
+	}px)`
+	const snakesTranslate = snakes.map(s => s.style.transform)
+	while (snakesTranslate.includes(apple.style.transform)) {
+		apple.style.transform = `translate(${Math.floor(Math.random() * (size.width / 15)) * 15}px, ${
+			Math.floor(Math.random() * (size.height / 15)) * 15
+		}px)`
+	}
 	app()
 	score--
 	span.style.color = `hsl(${h}, 80%, 50%)`
@@ -271,7 +281,9 @@ const restart = () => {
 	hasStarted = 0
 	span.textContent = score
 	span.style.color = 'hsl(179, 100%, 55%)'
-	apple.style.transform = `translate(${Math.floor(Math.random() * (size.width / 15)) * 15}px, ${Math.floor(Math.random() * (size.height / 15)) * 15}px)`
+	apple.style.transform = `translate(${Math.floor(Math.random() * (size.width / 15)) * 15}px, ${
+		Math.floor(Math.random() * (size.height / 15)) * 15
+	}px)`
 	snake.style.transform = `translate(${size.width / 2 - 15}px, ${size.height / 2 - 15}px)`
 	snake.style.backgroundColor = '#fff'
 	position.x = getTranslate(snake, 'x')
